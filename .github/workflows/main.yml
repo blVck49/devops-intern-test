@@ -64,6 +64,6 @@ jobs:
               #sudo docker rm ${{ secrets.CONTAINER_NAME }}
 
               # Run a new container from a new image
-              sudo docker run -d -p --name ${{ secrets.CONTAINER_NAME }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+              sudo docker run -d --name ${{ secrets.CONTAINER_NAME }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       
