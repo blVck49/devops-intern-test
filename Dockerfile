@@ -1,6 +1,6 @@
 FROM node:slim
 
-WORKDIR .
+WORKDIR /api
 
 COPY package.json yarn.lock .
 
