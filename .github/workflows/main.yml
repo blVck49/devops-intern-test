@@ -50,17 +50,14 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to EC2 via SSH action
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY}}
-          IMAGE_TAG: ${{ github.sha }}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           script: |
+              #Pull image
+              docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
               # Stop all running container
               docker stop ${{ secrets.CONTAINER_NAME }}
               docker rm ${{ secrets.CONTAINER_NAME }}
