@@ -60,10 +60,10 @@ jobs:
               sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
               # Stop all running container
-              sudo docker stop ${{ secrets.CONTAINER_NAME }}
-              sudo docker rm ${{ secrets.CONTAINER_NAME }}
+              #sudo docker stop ${{ secrets.CONTAINER_NAME }}
+              #sudo docker rm ${{ secrets.CONTAINER_NAME }}
 
               # Run a new container from a new image
-              sudo docker run -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} --name ${{ secrets.CONTAINER_NAME }} -t $ECR_REPOSITORY:$IMAGE_TAG
+              sudo docker run -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} --name ${{ secrets.CONTAINER_NAME }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       
