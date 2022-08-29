@@ -49,6 +49,6 @@ jobs:
               #sudo docker rm ${{ secrets.CONTAINER_NAME }}
 
               # Run a new container from a new image
-              sudo docker run -d --name ${{ secrets.CONTAINER_NAME }} -t 423635286572.dkr.ecr.us-east-1.amazonaws.com/test-hub:0e4faab372f2e8c2c79bc32746a3a906fb9080f5
+              sudo docker run -d --name ${{ secrets.CONTAINER_NAME }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       
