@@ -34,10 +34,6 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Log out of Amazon ECR
-        if: always()
-        run: docker logout ${{ steps.login-ecr.outputs.registry}}
-
   deployment:
     runs-on: ubuntu-latest
     needs: [build]
@@ -52,6 +48,10 @@ jobs:
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY}}
+          IMAGE_TAG: ${{ github.sha }}
 
       - name: Deploy to EC2 via SSH action
         uses: appleboy/ssh-action@master
