@@ -72,12 +72,14 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           envs: ECR_REGISTRY,ECR_REPOSITORY,IMAGE_TAG
           script: |
+
+              echo $ECR_REGISTRY 
+              echo $ECR_REPOSITRY
+              echo $IMAGE_TAG
               #Pull image
               sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
               #Run a new container from a new image
-              echo $ECR_REGISTRY
-              echo $ECR_REPOSITORY
               sudo docker-compose up -d
               
 
