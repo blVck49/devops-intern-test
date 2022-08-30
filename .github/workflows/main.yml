@@ -79,7 +79,7 @@ jobs:
               printenv
 
               #Pull image
-              sudo docker pull $ACCOUNT_ID $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+              sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
               #Run a new container from a new image
               sudo docker-compose up -d
