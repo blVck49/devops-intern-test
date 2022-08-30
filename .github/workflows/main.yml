@@ -73,6 +73,7 @@ jobs:
           envs: ECR_REGISTRY,ECR_REPOSITORY,IMAGE_TAG
           script: |
               echo "$ECR_REGISTRY" "$ECR_REPOSITRY" "$IMAGE_TAG"
+              printenv
 
               #Pull image
               sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
