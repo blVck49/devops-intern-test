@@ -57,7 +57,7 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY }}
           source: "docker-compose.yml"
-          target: "/home/ubuntu"
+          target: "/home/ubuntu/test"
         
 
       - name: Deploy to EC2 via SSH action
