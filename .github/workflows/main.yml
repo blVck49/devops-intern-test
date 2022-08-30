@@ -27,7 +27,7 @@ jobs:
 
       - name: build, tag, and push image to Amazon ECR
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY}}
           IMAGE_TAG: ${{ github.sha }}
         run: |
@@ -63,7 +63,7 @@ jobs:
       - name: Deploy to EC2 via SSH action
         uses: appleboy/ssh-action@master
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY}}
           IMAGE_TAG: ${{ github.sha }}
         with:
@@ -79,7 +79,7 @@ jobs:
               printenv
 
               #Pull image
-              sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+              sudo docker pull $ACCOUNT_ID $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
               #Run a new container from a new image
               sudo docker-compose up -d
