@@ -1,7 +1,8 @@
 version: "3.9"
 services:
   manator-api:
-    image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    #image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    image: "423635286572.dkr.ecr.us-east-1.amazonaws.com/test-hub:e25202291501b10d63daaca29b26164faaafa47b"
     ports:
       - "3000:3000"
     
