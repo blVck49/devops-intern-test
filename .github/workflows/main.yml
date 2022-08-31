@@ -54,7 +54,7 @@ jobs:
           target: "/home/ubuntu"
         
       - name: Deploy to EC2 via SSH action
-        uses: ./
+        uses: appleboy/ssh-action@master
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY}}
