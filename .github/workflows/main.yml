@@ -65,7 +65,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           envs: ECR_REGISTRY,ECR_REPOSITORY,IMAGE_TAG
           script: |
-
+          
               export ECR_REGISTRY="$ECR_REGISTRY" 
               export ECR_REPOSITORY="$ECR_REPOSITORY" 
               export IMAGE_TAG="$IMAGE_TAG"
