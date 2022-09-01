@@ -27,7 +27,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: get commit tag
-        run:  echo "{tag}={git describe --tags -always}" >> $GITHUB_ENV
+        run: echo "{tag}={git describe --tags --always}" >> $GITHUB_ENV
 
       - name: build, tag, and push image to Amazon ECR production
         if: github.ref == 'refs/heads/master'
