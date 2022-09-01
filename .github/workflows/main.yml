@@ -28,7 +28,7 @@ jobs:
 
       - name: get commit tag
         run: |
-          echo "{IMAGE_TAG}={git describe --tags --always}" >> $GITHUB_ENV
+          git describe --tags --always
 
       - name: build, tag, and push image to Amazon ECR production
         if: github.ref == 'refs/heads/master'
