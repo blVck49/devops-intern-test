@@ -1,13 +1,14 @@
-name: Heroku Deploy (build, push to ecr, deploy)
+name: Build and Push to ECR
 
 on:
   push:
     branches:
+      - staging
       - master
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on:  ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -16,63 +17,33 @@ jobs:
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
-        with:
+        with: 
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
+        
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: build, tag, and push image to Amazon ECR
+      - name: build, tag, and push image to Amazon ECR production
+        if: github.ref == 'refs/heads/master'
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY}}
-          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: git describe --tags --always
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-      - name: Log out of Amazon ECR
-        if: always()
-        run: docker logout ${{ steps.login-ecr.outputs.registry}}
-
-  deployment:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-      - uses: actions/checkout@master
-
-      - name: Upload docker-compose file to EC2
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "docker-compose.yml"
-          target: "/home/ubuntu"
-        
-      - name: Deploy to EC2 via SSH action
-        uses: appleboy/ssh-action@master
+          docker push $ECR_REGISTRY/$ECR_REGISTRY:$IMAGE_TAG 
+      
+      - name: build, tag, and push image to Amazon ECR staging
+        if: github.ref == 'refs/heads/staging'
         env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY}}
-          IMAGE_TAG: ${{ github.sha }}
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          envs: ECR_REGISTRY,ECR_REPOSITORY,IMAGE_TAG
-          script: |
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha}}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REGISTRY:$IMAGE_TAG 
+      
 
-              export ECR_REGISTRY="$ECR_REGISTRY" 
-              export ECR_REPOSITORY="$ECR_REPOSITORY" 
-              export IMAGE_TAG="$IMAGE_TAG"
-
-              #Pull image
-              sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-              #Run a new container from a new image
-              sudo docker-compose up -d  
-              
