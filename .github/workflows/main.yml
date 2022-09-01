@@ -26,9 +26,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: get commit tag
-        run: echo "{tag}={git describe --tags --always}" >> $GITHUB_ENV
-
       - name: build, tag, and push image to Amazon ECR production
         if: github.ref == 'refs/heads/master'
         env:
@@ -37,7 +34,7 @@ jobs:
           IMAGE_TAG: $tag
         run: |
           echo $IMAGE-TAG
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{git describe --tags --always}} .
           docker push $ECR_REGISTRY/$ECR_REGISTRY:$IMAGE_TAG 
     
 
