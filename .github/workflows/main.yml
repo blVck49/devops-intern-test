@@ -29,7 +29,7 @@ jobs:
       - name: get commit tag
         id: get_tag
         run: |
-          echo "::set-output name=git describe --tags --always::${IMAGE_TAG}
+          echo "::set-output name=git describe --tags --always::$(IMAGE_TAG)
 
       - name: build, tag, and push image to Amazon ECR production
         if: github.ref == 'refs/heads/master'
