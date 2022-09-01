@@ -33,6 +33,7 @@ jobs:
           echo $IMAGE_TAG
 
       - name: build, tag, and push image to Amazon ECR production
+        uses: actions/checkout@v2
         if: github.ref == 'refs/heads/master'
         with:
           IMAGE_TAG: ${{ steps.get_tag.ouputs.image_tag}}
