@@ -39,8 +39,8 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG:  production-${{ steps.commit_tag.outputs.image_tag }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG:latest .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG:latest 
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG':latest' .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG':latest' 
 
       - name: build, tag, and push image to ECR staging(staging)
         if: github.ref == 'refs/heads/staging'
