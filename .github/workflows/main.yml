@@ -30,14 +30,14 @@ jobs:
         id: commit_tag
         if: github.ref == 'refs/heads/master'
         run: |
-          echo ::set-output name=image_tag::$(git describe --tags --always)
+          echo ::set-output name=image_tag::$(git describe --tags --always):latest
 
       - name: build, tag, and push image to ECR(production)
         if: github.ref == 'refs/heads/master'
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-          IMAGE_TAG: production-${{ steps.commit_tag.outputs.image_tag }}-latest
+          IMAGE_TAG: production-${{ steps.commit_tag.outputs.image_tag }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
