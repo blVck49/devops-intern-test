@@ -37,10 +37,10 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-          IMAGE_NAME: "${ECR_REGISTRY}/${ECR_REPOSITORY}"
-          DYNAMIC: production-${{ steps.commit_tag.outputs.image_tag }}
-          TAG: ${IMAGE_NAME}:${DYNAMIC}
-          LATEST: "${IMAGE_NAME}:${DYNAMIC}-latest"
+          #IMAGE_NAME: "${ECR_REGISTRY}/${ECR_REPOSITORY}"
+          #DYNAMIC: production-${{ steps.commit_tag.outputs.image_tag }}
+          TAG: ${ECR_REGISTRY}/${ECR_REPOSITORY}:production-${{ steps.commit_tag.outputs.image_tag }}
+          LATEST: ${ECR_REGISTRY}/${ECR_REPOSITORY}:production-${{ steps.commit_tag.outputs.image_tag }}-latest
         run: |
           docker build -t ${TAG}.
           docker tag ${IMG} ${LATEST}
