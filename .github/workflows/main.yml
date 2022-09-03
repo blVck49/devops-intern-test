@@ -42,7 +42,7 @@ jobs:
           TAG: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-${{ steps.commit_tag.outputs.image_tag }}
           LATEST: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-${{ steps.commit_tag.outputs.image_tag }}-latest
         run: |
-          docker build -t ${TAG}.
+          docker build -t ${TAG} .
           docker tag ${IMG} ${LATEST}
           docker push ${IMG} ${LATEST}
 
