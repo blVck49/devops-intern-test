@@ -36,11 +36,11 @@ jobs:
         if: github.ref == 'refs/heads/master'
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          ECR_REPOSITORY: test-hub
           #IMAGE_NAME: "${ECR_REGISTRY}/${ECR_REPOSITORY}"
           #DYNAMIC: production-${{ steps.commit_tag.outputs.image_tag }}
-          TAG: ${ECR_REGISTRY}/${ECR_REPOSITORY}:production-${{ steps.commit_tag.outputs.image_tag }}
-          LATEST: ${ECR_REGISTRY}/${ECR_REPOSITORY}:production-${{ steps.commit_tag.outputs.image_tag }}-latest
+          TAG: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-${{ steps.commit_tag.outputs.image_tag }}
+          LATEST: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-${{ steps.commit_tag.outputs.image_tag }}-latest
         run: |
           docker build -t ${TAG}.
           docker tag ${IMG} ${LATEST}
@@ -50,7 +50,7 @@ jobs:
         if: github.ref == 'refs/heads/staging'
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          ECR_REPOSITORY: test-hub
           IMAGE_TAG: "staging"
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
