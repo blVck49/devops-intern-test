@@ -43,8 +43,8 @@ jobs:
           LATEST: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-${{ steps.commit_tag.outputs.image_tag }}-latest
         run: |
           docker build -t ${TAG} .
-          docker tag ${IMG} ${LATEST}
-          docker push ${IMG} ${LATEST}
+          docker tag ${TAG} ${LATEST}
+          docker push ${LATEST}
 
       - name: build, tag, and push image to ECR staging(staging)
         if: github.ref == 'refs/heads/staging'
