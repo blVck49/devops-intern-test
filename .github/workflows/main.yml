@@ -37,10 +37,14 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-          IMAGE_TAG:  'production-${{ steps.commit_tag.outputs.image_tag }}'
+          IMAGE_NAME: "${ECR_REGISTRY}/${ECR_REPOSITORY}"
+          DYNAMIC: production-${{ steps.commit_tag.outputs.image_tag }}
+          TAG: ${IMAGE_NAME}:${DYNAMIC}
+          LATEST: "${IMAGE_NAME}:${DYNAMIC}-latest"
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t ${TAG}.
+          docker tag ${IMG} ${LATEST}
+          docker push ${IMG} ${LATEST}
 
       - name: build, tag, and push image to ECR staging(staging)
         if: github.ref == 'refs/heads/staging'
