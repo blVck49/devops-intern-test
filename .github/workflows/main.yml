@@ -37,13 +37,12 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
           ECR_REPOSITORY: test-hub
-          #IMAGE_NAME: "${ECR_REGISTRY}/${ECR_REPOSITORY}"
-          #DYNAMIC: production-${{ steps.commit_tag.outputs.image_tag }}
-          TAG: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-${{ steps.commit_tag.outputs.image_tag }}
-          LATEST: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-${{ steps.commit_tag.outputs.image_tag }}-latest
+          IMG: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-${{ steps.commit_tag.outputs.image_tag }}
+          LATEST: ${{ steps.login-ecr.outputs.registry}}/test-hub:production-latest
         run: |
-          docker build -t ${TAG} .
-          docker tag ${TAG} ${LATEST}
+          docker build -t ${IMG} .
+          docker tag ${IMG} ${LATEST}
+          docker push ${IMG}
           docker push ${LATEST}
 
       - name: build, tag, and push image to ECR staging(staging)
@@ -51,10 +50,10 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry}}
           ECR_REPOSITORY: test-hub
-          IMAGE_TAG: "staging"
+          IMG: "staging"
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMG
     
 
 
